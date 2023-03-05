@@ -256,7 +256,7 @@ def Menu():
         if var_elect=="2":
             ConsultaYReportes()
         elif var_elect=="3":
-            print("Ha salido del programa")
+            print("Ha salido del programa ")
             break
 
 Menu()
