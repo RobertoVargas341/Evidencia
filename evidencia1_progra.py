@@ -1,171 +1,262 @@
 # Biblioteca.py
+libros=dict()
 
-catalogo = []
-autores = []
-generos = []
-
-while True:
-    print("---- Menú Principal ----")
-    print("1. Registrar la adquisición de un ejemplar")
-    print("2. Consultar los datos de un título")
-    print("3. Reporte tabular de todos los ejemplares")
-    print("4. Reporte tabular de todos los ejemplares para un autor específico")
-    print("5. Reporte tabular de todos los ejemplares para un género específico")
-    print("6. Reporte tabular de todos los ejemplares para un año específico")
-    print("7. Salir")
-
-    opcion = input("Seleccione una opción: ")
-
-    if opcion == "1":
-        print("---- Registrar la adquisición de un ejemplar ----")
-        ejemplar = {}
-
+def RegistrarNuevoEjempar():
+    while True:
+        global identificador
+        print("")
+        print("****Registrar Libro*****")
+        #Generacion de llaves de diccionario; si ya hay llaves en el diccionario añade 1 mas al conteo, si no, asigna la primera lista primero con el numero 1
+        if libros.keys():
+            identificador=max(libros.keys())+1
+        else:
+            identificador=1
+        print()
         
-        identificador = len(catalogo) + 1
-        ejemplar["Identificador"] = identificador
+        #Entrada de datos para el registro de libro
+        titulo=input("Ingresa el titulo: ")
+        titulo=titulo.upper()
+        
+        autor=input("Ingresa el autor: ")
+        autor=autor.upper()
+        
+        genero=input("Ingresa el genero: ")
+        genero=genero.upper()
+        
+        
+        añoPublic=input("Ingresa el año de publicacion: ")
+        
+        isbn=input("Ingresa el ISBN: ")
+        isbn=isbn.upper()
 
-      
-        titulo = input("Ingrese el título del ejemplar: ").upper()
-        ejemplar["Título"] = titulo
-
-      
-        autor = input("Ingrese el nombre del autor: ").upper()
-        ejemplar["Autor"] = autor
-
-        if autor not in autores:
-            autores.append(autor)
-
-      
-        genero = input("Ingrese el género del ejemplar: ").upper()
-        ejemplar["Género"] = genero
-
-        if genero not in generos:
-            generos.append(genero)
-
-        while True:
-            ano_publicacion = input("Ingrese el año de publicación del ejemplar: ")
-            if len(ano_publicacion) != 4 or not ano_publicacion.isdigit():
-                print("Año inválido, debe ser de 4 dígitos.")
-            else:
-                ejemplar["Año de publicación"] = int(ano_publicacion)
-                break
-
-        while True:
-            isbn = input("Ingrese el ISBN del ejemplar (13 dígitos): ")
-            if len(isbn) != 13 or not isbn.isdigit():
-              print("ISBN inválido, debe ser de 13 dígitos.")
-            else:
-                ejemplar["ISBN"] = isbn
-                break
+        fechAdqui=input("Ingresa el año de adquisicion: ")
+        
+        #Datos ingresados almacenados en la lista "ejemplar"
+        ejemplar=(titulo,autor,genero,añoPublic,isbn,fechAdqui)
+        
+        #Lista ejemplar guardada en el diccionario de "libros"
+        libros[identificador]=ejemplar
+        
+        
+        agregar=input("Desea agregar otro libro? [S/N]: ")
+        agregar=agregar.upper()
+        
+        if agregar=="S":
+            pass
+        elif agregar=="N":
+            break
+        else:
+            print("opcion no valida")
 
 
-       
-        fecha_adquisicion = input("Ingrese la fecha de adquisición del ejemplar (DD/MM/AAAA): ")
-        ejemplar["Fecha de adquisición"] = fecha_adquisicion
+#Funcion que muestra todo el catalago completo de libros
+def MostrarCatalagoCompleto():
+    print()
+    print("*******Catalago completo********")
+    print("TITULO | AUTOR | GENERO | AÑO PUBLICACION | ISBN | AÑO ADQUISICION")
+    for libro in libros.values(): #Busqueda de los datos por medio de pocisiones en la lista
+        print(f"{libro[0]} | {libro[1]} | {libro[2]} | {libro[3]} | {libro[4]} | {libro[5]}")
 
-       
-        catalogo.append(ejemplar)
+#Funcion debusqueda por autor
+def ReportePorAutor():
+    autores=list()
+    print()
+    print("*******Reporte por autor******")
+    
+    #Muestra todos los autores de libros sin repetirlos
+    autores=list()
+    for libro in libros.values():
+        autores.append(libro[1])
+        for autor in autores:
+            if autores.count(autor)>1:
+                autores.remove(autor)
+    print("---AUTORES DISPONIBLES----")
+    for autor in autores:
+        print(f"-{autor}")
+    
+    #Consulta
+    autor=input("Ingrese el nombre del autor: ")
+    autorBuscado=autor.upper()
+    try:
+        print()
+        print("TITULO | AUTOR | GENERO | AÑO PUBLICACION | ISBN | AÑO ADQUISICION")
+        for libro in libros.values():
+            if libro[1]==autorBuscado:
+                print(f"{libro[0]} | {libro[1]} | {libro[2]} | {libro[3]} | {libro[4]} | {libro[5]}")
+    except:
+        pass
 
-        print(f"\nEl ejemplar con identificador {identificador} ha sido registrado exitosamente.\n")
-
-    elif opcion == "2":
-        print("---- Consultar los datos de un título ----")
-        sub_opcion = input("Buscar por título (T) o ISBN (I): ").upper()
-
-        if sub_opcion == "T":
-            
-            print("\n--- Lista de Títulos ---")
-            for ejemplar in catalogo:
-                print(ejemplar["Título"])
-            print("-----------------------\n")
-          
-    titulo = input("Ingrese el título a buscar: ").upper()
-    encontrado = False
-    for ejemplar in catalogo:
-      if ejemplar["Título"].upper() == titulo:
-        print(f"\nIdentificador: {ejemplar['Identificador']}")
-        print(f"Título: {ejemplar['Título']}")
-        print(f"Autor: {ejemplar['Autor']}")
-        print(f"Género: {ejemplar['Género']}")
-        print(f"Año de publicación: {ejemplar['Año de publicación']}")
-        print(f"ISBN: {ejemplar['ISBN']}")
-        print(f"Fecha de adquisición: {ejemplar['Fecha de adquisición']}\n")
-        encontrado = True
-    if not encontrado:
-            print(f"\nEl título '{titulo}' no se encuentra en el catálogo.\n")
-
-    elif sub_opcion == "I":
-      isbn = input("Ingrese el ISBN a buscar (13 dígitos): ")
-      encontrado = False
-      for ejemplar in catalogo:
-            if ejemplar["ISBN"] == isbn:
-                print(f"\nIdentificador: {ejemplar['Identificador']}")
-                print(f"Título: {ejemplar['Título']}")
-                print(f"Autor: {ejemplar['Autor']}")
-                print(f"Género: {ejemplar['Género']}")
-                print(f"Año de publicación: {ejemplar['Año de publicación']}")
-                print(f"ISBN: {ejemplar['ISBN']}")
-                print(f"Fecha de adquisición: {ejemplar['Fecha de adquisición']}\n")
-                encontrado = True
-                break
-
-            if not encontrado:
-              print(f"\nEl ISBN '{isbn}' no se encuentra en el catálogo.\n")
-
-            else:
-              print("Opción inválida.")
-
-    elif opcion == "3":
-      print("---- Reporte tabular de todos los ejemplares ----")
-      print("Identificador | Título | Autor | Género | Año de publicación | ISBN | Fecha de adquisición")
-      print("----------------------------------------------------------------------------------------")
-      for ejemplar in catalogo:
-        print(f"{ejemplar['Identificador']:13} | {ejemplar['Título']:6} | {ejemplar['Autor']:5} | {ejemplar['Género']:6} | {ejemplar['Año de publicación']:19} | {ejemplar['ISBN']:13} | {ejemplar['Fecha de adquisición']:21}")
-      print()
-
-    elif opcion == "4":
-      print("---- Reporte tabular de todos los ejemplares para un autor específico ----")
-      print("\n--- Lista de Autores ---")
-      for autor in autores:
-        print(autor)
-        print("------------------------\n")
-
-      autor = input("Ingrese el nombre del autor a buscar: ").upper()
-      print("Identificador | Título | Género | Año de publicación | ISBN | Fecha de adquisición")
-      print("--------------------------------------------------------------------------------")
-      for ejemplar in catalogo:
-        if ejemplar["Autor"] == autor:
-          print(f"{ejemplar['Identificador']:13} | {ejemplar['Título']:6} | {ejemplar['Género']:6} | {ejemplar['Año de publicación']:19} | {ejemplar['ISBN']:13} | {ejemplar['Fecha de adquisición']}")
-
-    elif opcion == "5":
-        print("---- Reporte tabular de todos los ejemplares para un género específico ----")
-        print("\n--- Lista de Géneros ---")
+#Funcion busqueda por genero
+def ReportePorGenero():
+    print()
+    print("*******Reporte por genero******")
+    
+    #Muestra todos los autores de libros sin repetirlos
+    generos=list()
+    for libro in libros.values():
+        generos.append(libro[2])
         for genero in generos:
-            print(genero)
-        print("------------------------\n")
-
-        genero = input("Ingrese el género a buscar: ").upper()
-        print("Identificador | Título | Autor | Año de publicación | ISBN | Fecha de adquisición")
-        print("--------------------------------------------------------------------------------")
-        for ejemplar in catalogo:
-            if ejemplar["Género"] == genero:
-                print(f"{ejemplar['Identificador']:13} | {ejemplar['Título']:6} | {ejemplar['Autor']:5} | {ejemplar['Año de publicación']:19} | {ejemplar['ISBN']:13} | {ejemplar['Fecha de adquisición']:21}")
+            if generos.count(genero)>1:
+                generos.remove(genero)
+    print("---GENEROS DISPONIBLES----")
+    for genero in generos:
+        print(f"-{genero}")
+    
+    #Consulta
+    genero=input("Ingrese el genero: ")
+    generoBuscado=genero.upper()
+    try:
         print()
+        print("TITULO | AUTOR | GENERO | AÑO PUBLICACION | ISBN | AÑO ADQUISICION")
+        for libro in libros.values():
+            if libro[2]==generoBuscado:
+                print(f"{libro[0]} | {libro[1]} | {libro[2]} | {libro[3]} | {libro[4]} | {libro[5]}")
+    except:
+        pass
 
-    elif opcion == "6":
-        print("---- Reporte tabular de todos los ejemplares para un año específico ----")
-        anio = input("Ingrese el año a buscar: ")
-        print("Identificador | Título | Autor | Género | ISBN | Fecha de adquisición")
-        print("------------------------------------------------------------------")
-        for ejemplar in catalogo:
-            if ejemplar["Año de publicación"] == anio:
-                print(f"{ejemplar['Identificador']:13} | {ejemplar['Título']:6} | {ejemplar['Autor']:5} | {ejemplar['Género']:6} | {ejemplar['ISBN']:13} | {ejemplar['Fecha de adquisición']:21}")
+#Funcion busqueda por año
+def ReportePorAño():
+    print()
+    print("*******Reporte por año de publicacion******")
+    
+    #Muestra todos los autores de libros sin repetirlos
+    años=list()
+    for libro in libros.values():
+        años.append(libro[3])
+        for año in años:
+            if años.count(año)>1:
+                años.remove(año)
+    print("---GENEROS DISPONIBLES----")
+    for año in años:
+        print(f"-{año}")
+
+    #Consulta
+    año=input("Ingrese el año: ")
+    añoBuscado=año.upper()
+    try:
         print()
+        print("TITULO | AUTOR | GENERO | AÑO PUBLICACION | ISBN | AÑO ADQUISICION")
+        for libro in libros.values():
+            if libro[3]==añoBuscado:
+                print(f"{libro[0]} | {libro[1]} | {libro[2]} | {libro[3]} | {libro[4]} | {libro[5]}")
+    except:
+        pass
 
-    elif opcion == "7":
-       
-        print("Saliendo del programa...")
-        break
+# Sub menu de Reportes
+def Reportes():
+    while True:
+        print()
+        print("*****Reportes*****")
+        print("*1* Catalago completo")
+        print("*2* Reporte por autor")
+        print('*3* Reporte por genero')
+        print('*4* Reporte por año de publicacion')
+        print('*5* Regresar al menu anterior')
+        eleccion=int(input("Selecciona una opcion: "))
+        if eleccion==1:
+            MostrarCatalagoCompleto()
+        if eleccion==2:
+            ReportePorAutor()
+        if eleccion==3:
+            ReportePorGenero()
+        if eleccion==4:
+            ReportePorAño()
+        if eleccion==5:
+            break
 
-    else:
-        print("Opción inválida.")
+
+
+def BusquedaPorTitulo():
+    print()
+    print("*****Busqueda por titulo******")
+    titulos=list()
+    for libro in libros.values():
+        titulos.append(libro[0])
+        for titulo in titulos:
+            if titulos.count(titulo)>1:
+                titulos.remove(titulo)
+    print("-----TITULOS DISPONIBLES-----")
+    for titulo in titulos:
+        print(f"-{titulo}")
+    #Consulta
+    titulo=input("Ingrese el titulo del libro: ")
+    tituloBuscado=titulo.upper()
+    try:
+        print()
+        print("TITULO | AUTOR | GENERO | AÑO PUBLICACION | ISBN | AÑO ADQUISICION")
+        for libro in libros.values():
+            if libro[0]==tituloBuscado:
+                print(f"{libro[0]} | {libro[1]} | {libro[2]} | {libro[3]} | {libro[4]} | {libro[5]}")
+    except:
+        pass
+
+
+def BusquedaPorISBN():
+    print()
+    print("*****Busqueda por ISBN******")
+
+    #Consulta
+    isbn=input("Ingrese el ISBN del libro: ")
+    try:
+        print()
+        print("TITULO | AUTOR | GENERO | AÑO PUBLICACION | ISBN | AÑO ADQUISICION")
+        for libro in libros.values():
+            if libro[4]==isbn:
+                print(f"{libro[0]} | {libro[1]} | {libro[2]} | {libro[3]} | {libro[4]} | {libro[5]}")
+    except:
+        pass
+
+#Sub menu para la busqueda por titulo y ISBN
+def TituloYIsbn():
+    while True:
+        print()
+        print("**********Consulta por titulo y ISBN****")
+        print()
+        print("*1* busqueda por Titulo")
+        print("*2* Busqueda por ISBN")
+        print("*3* Volver al menu principal")
+        eleccion=int(input("Elige una opcion: "))
+        if eleccion==1:
+            BusquedaPorTitulo()
+        if eleccion==2:
+            BusquedaPorISBN()
+        if eleccion==3:
+            break
+
+#Submenu de consultas y reportes 
+def ConsultaYReportes():
+    while True:
+        print()
+        print("*********CONSULTA Y REPORTES****************")
+        
+        print("*1* Consulta de titulo y ISBN")
+        print("*2* Reportes")
+        print("*3* Volver al menu principal")
+        eleccion=int(input("Elige una opcion: "))
+        if eleccion==1:
+            TituloYIsbn()
+        if eleccion==2:
+            Reportes()
+        if eleccion==3:
+            break
+
+# Menu principal
+def Menu():
+    while True:
+        print()
+        print("***********BIBLIOTECA*************")
+        print()
+        print("*1* Registrar nuevo ejemplar")
+        print("*2* Consultas y reportes")
+        print("*3* Salir")
+        print()
+        var_elect=input("Ingrese un numero: ")
+        if var_elect=="1":
+            RegistrarNuevoEjempar()
+        if var_elect=="2":
+            ConsultaYReportes()
+        elif var_elect=="3":
+            print("Ha salido del programa")
+            break
+
+Menu()
