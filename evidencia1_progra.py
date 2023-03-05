@@ -250,7 +250,7 @@ def Menu():
         print("*2* Consultas y reportes")
         print("*3* Salir")
         print()
-        var_elect=input("Ingrese un numero: ")
+        var_elect=input("Ingrese algun numero: ")
         if var_elect=="1":
             RegistrarNuevoEjempar()
         if var_elect=="2":
