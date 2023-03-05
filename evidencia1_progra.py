@@ -150,7 +150,7 @@ def Reportes():
         print("*1* Catalago completo")
         print("*2* Reporte por autor")
         print('*3* Reporte por genero')
-        print('*4* Reporte por año de publicacion')
+        print('*4* Reporte por año de publicación')
         print('*5* Regresar al menu anterior')
         eleccion=int(input("Selecciona una opcion: "))
         if eleccion==1:
