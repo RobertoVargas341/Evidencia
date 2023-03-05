@@ -13,7 +13,7 @@ def RegistrarNuevoEjempar():
             identificador=1
         print()
         
-        #Entrada de datos para el registro de libro
+        #Entrada de los datos para el registro del libro
         titulo=input("Ingresa el titulo: ")
         titulo=titulo.upper()
         
