@@ -249,9 +249,9 @@ def Menu():
         print("*2* Consultas y reportes")
         print("*3* Salir")
         print()
-        var_elect=input("Ingrese algun numero: ")
+        var_elect=input("Ingrese algún numero, por favor: ")
         if var_elect=="1":
-            RegistrarNuevoEjempar()
+            RegistrarNuevoEjemplar()
         if var_elect=="2":
             ConsultaYReportes()
         elif var_elect=="3":
